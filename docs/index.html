@@ -1,1 +1,687 @@
+<!DOCTYPE html>
 
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Duarte Da Silva" />
+
+<meta name="date" content="2025-04-27" />
+
+<title>Stock Market Analysis Phase 1</title>
+
+<script src="Phase1_Markdown_files/header-attrs-2.29/header-attrs.js"></script>
+<script src="Phase1_Markdown_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="Phase1_Markdown_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="Phase1_Markdown_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="Phase1_Markdown_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="Phase1_Markdown_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="Phase1_Markdown_files/navigation-1.1/tabsets.js"></script>
+<link href="Phase1_Markdown_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="Phase1_Markdown_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Stock Market Analysis Phase 1</h1>
+<h4 class="author">Duarte Da Silva</h4>
+<h4 class="date">2025-04-27</h4>
+
+</div>
+
+
+<div id="trade-signal-generator-using-macd-rsi" class="section level1">
+<h1>📈 Trade Signal Generator Using MACD + RSI</h1>
+<div
+id="a-modular-r-function-that-scans-for-bullishbearish-entry-setups-in-any-stock"
+class="section level3">
+<h3>A modular R function that scans for bullish/bearish entry setups in
+any stock</h3>
+</div>
+</div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This project was built to simulate how a technical trader might use
+MACD and RSI conditions — in combination with price positioning — to
+evaluate entry signals. I coded each condition check manually using R,
+and wrapped the logic in modular functions for long-term usability.</p>
+<p>This is a personal passion project I set out to do as a complimentary
+assignment to apply the knowledge learned on the Datacamp track
+Introduction to R for Finance, my objectives for today are the
+following:</p>
+<ul>
+<li>Write down important theory notes</li>
+<li>Pull Stock Data</li>
+<li>Plot a Candlestick Chart</li>
+<li>Calculate Indicators</li>
+<li>Plot indicators</li>
+<li>Risk Management Function</li>
+<li>Wrap up Day 1.</li>
+</ul>
+</div>
+<div id="day-1-sunday-april-27th" class="section level1">
+<h1>Day 1 Sunday, April 27th</h1>
+<div id="market-theory-notes-for-phase-1" class="section level2">
+<h2>Market Theory Notes (for Phase 1)</h2>
+<div id="supply-and-demand" class="section level3">
+<h3>1. Supply and Demand</h3>
+<div id="technical-definition" class="section level4">
+<h4>Technical Definition:</h4>
+<p>Markets move because of changes in supply (how much of something is
+available) and demand (how much people want it).</p>
+<p>If demand &gt; supply, prices rise (buyers fight for limited
+supply).</p>
+<p>If supply &gt; demand, prices fall (too much of something, buyers
+become picky).</p>
+</div>
+<div id="simple-example" class="section level4">
+<h4>Simple Example:</h4>
+<p>Imagine there are only 3 ice cream cones at the playground, but 10
+kids want one. Kids will start offering more and more to get one — price
+goes up!</p>
+<p>But if there are 100 ice cream cones and only 3 kids, the cones sit
+around — prices drop because nobody is desperate.</p>
+</div>
+</div>
+<div id="catalysts" class="section level3">
+<h3>2. Catalysts</h3>
+<div id="technical-definition-1" class="section level4">
+<h4>Technical Definition:</h4>
+<p>A catalyst is an event that suddenly increases supply or demand.</p>
+<p>Examples:</p>
+<p>Earnings Reports: Company profits higher than expected → more
+buyers.</p>
+<p>News Events: New product launch, lawsuit, scandal, CEO resigns.</p>
+<p>Economic Reports: Inflation data, employment rates, interest rate
+hikes.</p>
+</div>
+<div id="simple-example-1" class="section level4">
+<h4>Simple Example:</h4>
+<p>Imagine if you’re selling lemonade. Suddenly it’s a hot day and
+everyone’s thirsty — BOOM, everyone wants your lemonade = catalyst. Or
+if it starts raining and people run home — nobody buys lemonade = bad
+catalyst.</p>
+</div>
+</div>
+<div id="types-of-orders" class="section level3">
+<h3>3. Types of Orders</h3>
+<div id="technical-definition-2" class="section level4">
+<h4>Technical Definition:</h4>
+<p>Traders use different kinds of orders to control how and when they
+buy or sell:</p>
+<p>Market Order: Buy/sell immediately at current price.</p>
+<p>Limit Order: Buy/sell only if price reaches a specific number.</p>
+<p>Stop Order: Trigger a buy/sell when price passes a threshold.</p>
+</div>
+<div id="simple-example-2" class="section level4">
+<h4>Simple Example:</h4>
+<p>Market Order = “I want a toy NOW, I’ll pay whatever the price
+is.”</p>
+<p>Limit Order = “I’ll only buy the toy if it’s $10 or less.”</p>
+<p>Stop Order = “If the toy’s price falls to $5, tell me and I’ll buy
+it.”</p>
+</div>
+</div>
+<div id="risk-concepts" class="section level3">
+<h3>4. Risk Concepts</h3>
+<div id="technical-definition-3" class="section level4">
+<h4>Technical Definition:</h4>
+<p>Position Sizing: Deciding how much of your money you put into a
+single trade.</p>
+<p>Stop Loss: A pre-set rule that closes your trade if you lose too much
+money.</p>
+<p>Risk per Trade: How much (%) of your total account you are willing to
+risk on one bet.</p>
+<p>Key rules:</p>
+<p>Good traders risk only 1–2% of their money per trade.</p>
+<p>Stop Losses protect you from devastating losses.</p>
+</div>
+<div id="simple-example-3" class="section level4">
+<h4>Simple Example:</h4>
+<p>Imagine you have 100 dollars.</p>
+<p>You say, “I’ll only bet 2 dollars on this game of
+rock-paper-scissors.”</p>
+<p>If you lose, you lose 2 dollars — no big deal.</p>
+<p>If you lose 10 games, you still have 80 dollars left.</p>
+<p>Without rules, you could lose all your money in one bad bet!</p>
+</div>
+</div>
+</div>
+<div id="pulling-stock-data-plotting-charts" class="section level2">
+<h2>1. Pulling Stock Data &amp; Plotting Charts</h2>
+<pre class="r"><code># You can search a specific timeframe with the following syntax: 
+
+getSymbols(&quot;AAPL&quot;, src = &quot;yahoo&quot;, from = &quot;2023-01-01&quot;)</code></pre>
+<pre><code>## [1] &quot;AAPL&quot;</code></pre>
+<pre class="r"><code># Plot candlestick chart 
+chartSeries(AAPL, theme = chartTheme(&quot;white&quot;))</code></pre>
+<p><img src="Phase1_Markdown_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code># Add Indicators
+
+# 1. RSI
+addRSI(n = 14) # 14 is the standard period for RSI</code></pre>
+<p><img src="Phase1_Markdown_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<pre class="r"><code># 2. SMA20 &amp; SMA50
+addSMA(n = 20)</code></pre>
+<p><img src="Phase1_Markdown_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
+<pre class="r"><code>addSMA(n = 50)</code></pre>
+<p><img src="Phase1_Markdown_files/figure-html/unnamed-chunk-5-4.png" width="672" /></p>
+<pre class="r"><code># 3. MACD 
+addMACD(fast = 12, slow =26, signal = 9, type = &quot;EMA&quot;)</code></pre>
+<p><img src="Phase1_Markdown_files/figure-html/unnamed-chunk-5-5.png" width="672" /></p>
+<pre class="r"><code># 4. EMA (Optional) 
+
+addEMA(n = 20) </code></pre>
+<p><img src="Phase1_Markdown_files/figure-html/unnamed-chunk-5-6.png" width="672" /></p>
+</div>
+<div id="creating-a-function" class="section level2">
+<h2>Creating a function()</h2>
+<p>The function() is a machine or function that takes inputs, performs
+an operation with them based on instructions and gives you an output,
+for example:</p>
+<pre class="r"><code>function_name &lt;- function(inputs) {
+  # Code to process the inputs 
+  # Output (usually with return())
+}</code></pre>
+<ul>
+<li><p>function_name – the name for your machine.</p></li>
+<li><p>&lt;- function(inputs) – Tell R you’re creating a function and
+list what information it needs.</p></li>
+<li><p>{} Write instructions for your machine.</p></li>
+</ul>
+<div id="simple-example-4" class="section level4">
+<h4>Simple Example</h4>
+<pre class="r"><code>say_hello &lt;- function(name) { 
+  message &lt;- paste(&quot;Hello&quot;, name)
+  return(message)
+}
+
+say_hello(&quot;Oscar&quot;)</code></pre>
+<pre><code>## [1] &quot;Hello Oscar&quot;</code></pre>
+<ul>
+<li>Name is the input.</li>
+<li>The function builds a message using paste().</li>
+<li>return() sends the message back to you.</li>
+<li>paste() combines inputs into a text string.</li>
+<li>Using return() is necessary for R to print the result.</li>
+</ul>
+</div>
+</div>
+<div id="calculating-position-size" class="section level2">
+<h2>2. Calculating position size</h2>
+<pre class="r"><code> # 1. Calculate position size
+calculate_position_size &lt;- function(account_balance, risk_percent, stop_loss_percent) { 
+  
+  # 2. Calculate $ amount to risk per trade 
+  dollar_risk &lt;- account_balance * (risk_percent / 100)
+  
+  # 3.  Calculate position size 
+  position_size &lt;- dollar_risk / (stop_loss_percent / 100)
+
+  return(list(
+    position_size = position_size,
+    dollar_risk = dollar_risk
+  ))
+  }</code></pre>
+<ul>
+<li><p>account_balance = total money you have in your account (e.g.,
+$10,000).</p></li>
+<li><p>risk_percent = how much % of your account you are willing to lose
+in one trade (e.g., 1%).</p></li>
+<li><p>dollar_risk = the exact amount of real $ you are willing to lose.
+i. e: 500 * (1/100) so 500 * 0.01 = 5.</p></li>
+<li><p>position_size = The amount of stock youre buying in the
+operation, i. e: 5 / (2/100) so 5 / 0.02 = 250, meaning you can fit the
+value “0.02” 250 times in the number 5.</p></li>
+<li><p>stop_loss_percent = how far away your stop loss is from entry
+price (e.g., 2%).</p></li>
+</ul>
+<div id="test-cases" class="section level4">
+<h4>Test Cases</h4>
+<pre class="r"><code># Test Case 1 
+calculate_position_size(500, 1, 2)</code></pre>
+<pre><code>## $position_size
+## [1] 250
+## 
+## $dollar_risk
+## [1] 5</code></pre>
+<pre class="r"><code># Test Case 2 
+calculate_position_size(50, 2, 5)</code></pre>
+<pre><code>## $position_size
+## [1] 20
+## 
+## $dollar_risk
+## [1] 1</code></pre>
+<pre class="r"><code># Test Case 3 
+calculate_position_size(5000, 1, 1.5)</code></pre>
+<pre><code>## $position_size
+## [1] 3333.333
+## 
+## $dollar_risk
+## [1] 50</code></pre>
+<pre class="r"><code># Test Case 4 
+calculate_position_size(25000, 0.5, 3)</code></pre>
+<pre><code>## $position_size
+## [1] 4166.667
+## 
+## $dollar_risk
+## [1] 125</code></pre>
+</div>
+</div>
+<div id="wrapping-up-day-1" class="section level2">
+<h2>Wrapping up Day 1</h2>
+<p>Today I learned to:</p>
+<ul>
+<li><p>Use getSymbols() function to import data from Yahoo
+finance.</p></li>
+<li><p>Use chartSeries() and addSMA(), etc to plot charts and add
+indicators such as: SMA, EMA, MACD and RSI.</p></li>
+<li><p>Build a function to calculate the dollar risk and position size
+of a possible trade.</p></li>
+</ul>
+</div>
+</div>
+<div id="day-2-monday-april-28th" class="section level1">
+<h1>Day 2 Monday, April 28th</h1>
+<div id="building-trade-signal-detection-function"
+class="section level2">
+<h2>3. Building Trade Signal Detection Function</h2>
+<p>The objective for day two is to build a function that:</p>
+<ul>
+<li>Suggests possible trade setups.</li>
+<li>Detects if stock is near Support/Resistance levels based on
+SMA.</li>
+<li>Confirms entry signal guided by a trigger combo of RSI and
+MACD.</li>
+<li>Calculates position size &amp; possible $ loss.</li>
+</ul>
+<p>To build this function im going to complete the next steps:</p>
+<ol style="list-style-type: decimal">
+<li>Pull the stock data</li>
+<li>Calculate Indicators</li>
+<li>Create a Trade Setup Logic</li>
+<li>Confirm with RSI and MACD</li>
+<li>Create Output</li>
+</ol>
+<pre class="r"><code>RSI_MACD_combo &lt;- function(ticker) {
+  library(quantmod)
+# 1. Pull Stock Data 
+
+stock_data &lt;- getSymbols(ticker, from = &quot;2024-04-28&quot;, auto.assign = TRUE)
+stock_data &lt;- get(ticker)
+
+# 2. Calculate indicators and save them as objects
+
+sma20 &lt;- SMA(Cl(stock_data), n = 20) 
+sma50 &lt;- SMA(Cl(stock_data), n = 50)
+rsi14 &lt;- RSI(Cl(stock_data), n = 14) 
+macd_vals &lt;- MACD(Cl(stock_data))
+
+# 3.  Build condition checks 
+
+close_today &lt;- as.numeric(last(Cl(stock_data)))
+
+# 4. Today&#39;s SMA values
+sma20_today &lt;- as.numeric(last(sma20))
+sma50_today &lt;- as.numeric(last(sma50))
+
+## Absolute difference between closing price and SMA
+
+diff_sma20 &lt;- abs(close_today - sma20_today)
+diff_sma50 &lt;- abs(close_today - sma50_today)
+
+## Calculate percentage difference relative to SMA
+
+perc_diff_sma20 &lt;- diff_sma20 / sma20_today
+perc_diff_sma50 &lt;- diff_sma50 / sma50_today
+
+## Check if the percentage difference is less than 2% 
+
+near_sma20 &lt;- perc_diff_sma20 &lt;= 0.02
+near_sma50 &lt;- perc_diff_sma50 &lt;= 0.02
+
+## Combined condition: near ANY SMA 
+
+near_any_sma &lt;- near_sma20 | near_sma50
+
+## Print both SMA condition results
+
+print(near_sma20)
+print(near_sma50)
+
+# 5. Today&#39;s RSI value
+
+rsi_today &lt;- as.numeric(last(rsi14))
+
+## Check RSI conditions
+
+rsi_buy_signal &lt;- rsi_today &lt; 30
+rsi_sell_signal &lt;- rsi_today &gt; 70
+
+## Print results
+print(rsi_today)
+print(rsi_buy_signal)
+print(rsi_sell_signal)
+
+# 6. MACD cross detection
+
+# WHAT YOU WANT TO CHECK: 
+## Buy signal: when MACD crosses above signal line.
+## Sell signal: when MACD crosses below signal line.
+
+## Extract MACD line and Signal line separately
+
+macd_line &lt;- macd_vals[, 1]
+macd_signal &lt;- macd_vals[, 2]
+
+## Get today&#39;s and yesterday&#39;s values
+
+macd_today &lt;- as.numeric(last(macd_line))
+signal_today &lt;- as.numeric(last(macd_signal))
+
+macd_yesterday &lt;- as.numeric(last(macd_line[nrow(macd_line) - 1]))
+signal_yesterday &lt;- as.numeric(macd_signal[nrow(macd_signal) - 1])
+
+## Check if a bullish crossover happened
+macd_bullish_cross &lt;- (macd_yesterday &lt; signal_yesterday) &amp; (macd_today &gt; signal_today)
+
+## Check if a bearish crossover happened
+macd_bearish_cross &lt;- (macd_yesterday &gt; signal_yesterday) &amp; (macd_today &lt; signal_today)
+
+## Print results 
+print(macd_bullish_cross)
+print(macd_bearish_cross)
+
+# 7. Build Trade Desicion Logic
+
+if(near_any_sma &amp; rsi_buy_signal &amp; macd_bullish_cross) { 
+  trade_signal &lt;- &quot;LOOK INTO&quot;
+} else if (near_any_sma &amp; rsi_sell_signal &amp; macd_bearish_cross) { 
+  trade_signal &lt;- &quot;LOOK INTO&quot;
+} else { 
+    trade_signal &lt;- &quot;NO ACTION&quot;
+}
+
+
+ 
+  sma_20_signal &lt;- near_sma20
+  sma_50_signal &lt;- near_sma50
+  any_sma_signal  &lt;- near_any_sma
+
+ 
+  # Final Output
+  
+  print(paste(&quot;Ticker:&quot;, ticker))
+  print(paste(&quot;Trade Recommendation:&quot;, trade_signal))
+  print(paste(&quot;Price is near SMA 20:&quot;, near_sma20))
+  print(paste(&quot;Price is near SMA 50:&quot;, near_sma50))
+  print(paste(&quot;Today&#39;s Close:&quot;, round(close_today,2)))
+  print(paste(&quot;RSI Today:&quot;, round(rsi_today)))
+  
+return(trade_signal)
+}</code></pre>
+<pre class="r"><code>RSI_MACD_combo(&quot;META&quot;)</code></pre>
+<pre><code>## [1] FALSE
+## [1] FALSE
+## [1] 60.39128
+## [1] FALSE
+## [1] FALSE
+## [1] FALSE
+## [1] FALSE
+## [1] &quot;Ticker: META&quot;
+## [1] &quot;Trade Recommendation: NO ACTION&quot;
+## [1] &quot;Price is near SMA 20: FALSE&quot;
+## [1] &quot;Price is near SMA 50: FALSE&quot;
+## [1] &quot;Today&#39;s Close: 597.02&quot;
+## [1] &quot;RSI Today: 60&quot;</code></pre>
+<pre><code>## [1] &quot;NO ACTION&quot;</code></pre>
+</div>
+<div id="wrapping-up-day-2" class="section level2">
+<h2>Wrapping Up Day 2</h2>
+<details>
+<summary>
+<strong>Click to expand: Trade Signal Explanation</strong>
+</summary>
+<p>Trade Signal Function Progress</p>
+<p>Today I spent most of my time working on the Trade Signal Function,
+which I named RSI_MACD_combo. I’m documenting this process to review my
+work and make sure I understand every part of it as I continue to build
+and evolve the function.</p>
+<p>The goal of this function is simple: ➡️ Use RSI and MACD triggers to
+suggest potential trade signals.</p>
+<p>Step 1: Pulling the Data I used getSymbols() to pull data directly
+from Yahoo Finance. To make the function dynamic and reusable, I used a
+ticker input instead of hard-coding any stock names. The pulled data is
+stored as stock_data:</p>
+<p>stock_data &lt;- getSymbols(ticker, from = “2024-04-28”, auto.assign
+= FALSE)</p>
+<p>Step 2: Adding Indicators I calculated all indicators based on the
+stock’s closing prices, using:</p>
+<p>SMA() for the 20- and 50-day moving averages,</p>
+<p>RSI() for momentum signals (14-day),</p>
+<p>MACD() for crossover detection.</p>
+<p>These all used the Cl() function to extract closing prices from the
+stock data.</p>
+<p>Step 3: Getting Today’s Values To check current market conditions, I
+used last() and as.numeric() to store today’s key values:</p>
+<p>close_today &lt;- as.numeric(last(Cl(stock_data))) sma20_today &lt;-
+as.numeric(last(sma20)) sma50_today &lt;- as.numeric(last(sma50))</p>
+<p>Step 4: Distance from SMA Check I used abs() to calculate the
+absolute difference between the closing price and each SMA. Then I
+calculated the percentage difference to define whether the price is
+“near” either moving average. I considered within 2% to be “close.”</p>
+<p>Step 5: RSI Signal I grabbed today’s RSI value using:</p>
+<p>rsi_today &lt;- as.numeric(last(rsi14)) Then I defined:</p>
+<p>RSI below 30 = potential buy signal</p>
+<p>RSI above 70 = potential sell signal</p>
+<p>Step 6: MACD Crossover I separated the MACD line and Signal line from
+the MACD output, then built two condition checks:</p>
+<p>Bullish Cross = MACD crosses above signal line</p>
+<p>Bearish Cross = MACD crosses below signal line</p>
+<p>This helps identify momentum shifts in price action.</p>
+<p>Step 7: Trade Decision Logic Once I had all the indicators and
+condition checks in place, I built the actual decision logic.</p>
+<p>The function checks:</p>
+<p>Is the price near either SMA?</p>
+<p>Is there a buy/sell signal from RSI?</p>
+<p>Is there a MACD crossover confirming that signal?</p>
+<p>If all conditions align, the function returns “LOOK INTO”, along
+with:</p>
+<p>The ticker,</p>
+<p>The RSI reading,</p>
+<p>The closing price,</p>
+<p>Which SMA the price is closest to.</p>
+<p>This project is helping me improve both my R syntax and my ability to
+think like a data-driven trader. Every time I rebuild a piece of the
+function, I understand it a little better — and I’m excited to keep
+refining it over the next few days.</p>
+</details>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
